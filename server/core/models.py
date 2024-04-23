@@ -56,18 +56,30 @@ class Product(TimeStampedModel):
 class Cart(TimeStampedModel):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user} - {self.cartitem_set.all().count()}"
+
 
 class CartItem(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"
+
 
 class Order(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.user} - {self.orderitem_set.all().count()}"
 
 
 class OrderItem(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"

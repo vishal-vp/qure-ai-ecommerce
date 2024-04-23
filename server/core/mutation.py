@@ -3,7 +3,7 @@ import graphene
 import jwt
 from django.conf import settings
 from django.db.models import F, Q
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 from graphene_django import DjangoObjectType
 from core import inputs, models, types
@@ -99,8 +99,35 @@ class UpdateCart(BaseMutation):
             return UpdateCart(ok=False, error_message="Unable to update cart")
 
 
+class PlaceOrder(BaseMutation):
+
+    order = graphene.Field(types.OrderType)
+
+    @classmethod
+    @jwt_token_required
+    def mutate(cls, root, info, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                cart = models.Cart.objects.get(user=info.context.user)
+                if cart.cartitem_set.all().count() < 1:
+                    return PlaceOrder(ok=False, error_message="No items in the cart!")
+                order = models.Order.objects.create(user=info.context.user)
+                for cart_item in cart.cartitem_set.select_for_update().all():
+                    models.OrderItem.objects.create(
+                        product=cart_item.product,
+                        quantity=cart_item.quantity,
+                        order=order,
+                    )
+                    cart_item.delete()
+                return PlaceOrder(ok=True, order=order)
+        except Exception:
+            logger.exception("Error placing order")
+            return PlaceOrder(ok=False, error_message="Unable to place order")
+
+
 class Mutation(graphene.ObjectType):
     login = Login.Field()
     register = Register.Field()
     update_profile = UpdateProfile.Field()
     update_cart = UpdateCart.Field()
+    place_order = PlaceOrder.Field()
