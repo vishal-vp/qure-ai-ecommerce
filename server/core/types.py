@@ -12,6 +12,11 @@ class UserType(DjangoObjectType):
         model = User
 
 
+class UserProfileType(DjangoObjectType):
+    class Meta:
+        model = models.UserProfile
+
+
 class ProductType(DjangoObjectType):
     class Meta:
         model = models.Product
