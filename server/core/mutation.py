@@ -68,6 +68,19 @@ class UpdateProfile(BaseMutation):
         return UpdateProfile(ok=True, user_profile=user_profile)
 
 
+class AddProductToCart(BaseMutation):
+    class Arguments:
+        id_of_the_product_to_add = graphene.ID()
+
+    cart = graphene.Field(types.CartType)
+
+    @classmethod
+    @jwt_token_required
+    def mutate(cls, root, info, *args, **kwargs):
+        cart = models.Cart.objects.get_or_create(user=info.context.user)[0]
+        item = models.Item.objects.get_or_create(cart=cart)
+
+
 class Mutation(graphene.ObjectType):
     login = Login.Field()
     register = Register.Field()

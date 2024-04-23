@@ -53,16 +53,21 @@ class Product(TimeStampedModel):
         return self.name
 
 
-class PurchaseItem(TimeStampedModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField()
-
-
 class Cart(TimeStampedModel):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    products = models.ManyToManyField(PurchaseItem)
+
+
+class CartItem(TimeStampedModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField()
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
 
 class Order(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    products = models.ManyToManyField(PurchaseItem)
+
+
+class OrderItem(TimeStampedModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)

@@ -22,11 +22,21 @@ class ProductType(DjangoObjectType):
         model = models.Product
 
 
-class PurchaseItemType(DjangoObjectType):
+class CartItemType(DjangoObjectType):
     class Meta:
-        model = models.PurchaseItem
+        model = models.CartItem
 
 
 class CartType(DjangoObjectType):
     class Meta:
         model = models.Cart
+
+
+class OrderItemType(DjangoObjectType):
+    class Meta:
+        model = models.OrderItem
+
+
+class OrderType(DjangoObjectType):
+    class Meta:
+        model = models.Order
