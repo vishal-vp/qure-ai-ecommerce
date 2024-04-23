@@ -1,6 +1,9 @@
+import logging
 import graphene
 import jwt
 from django.conf import settings
+from django.db.models import F, Q
+from django.db import IntegrityError
 
 from graphene_django import DjangoObjectType
 from core import inputs, models, types
@@ -9,6 +12,7 @@ from django.contrib.auth import get_user_model
 from qure_ai_ecommerce.decorators import jwt_token_required
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class BaseMutation(graphene.Mutation):
@@ -68,20 +72,35 @@ class UpdateProfile(BaseMutation):
         return UpdateProfile(ok=True, user_profile=user_profile)
 
 
-class AddProductToCart(BaseMutation):
+class UpdateCart(BaseMutation):
     class Arguments:
-        id_of_the_product_to_add = graphene.ID()
+        product_id = graphene.ID()
+        should_add = graphene.Boolean()
 
     cart = graphene.Field(types.CartType)
 
     @classmethod
     @jwt_token_required
     def mutate(cls, root, info, *args, **kwargs):
-        cart = models.Cart.objects.get_or_create(user=info.context.user)[0]
-        item = models.Item.objects.get_or_create(cart=cart)
+        try:
+            difference = 1 if kwargs.get("should_add") else -1
+            cart = models.Cart.objects.get_or_create(user=info.context.user)[0]
+            product = models.Product.objects.get(id=kwargs.get("product_id"))
+            cart_item_filters = Q(cart=cart, product=product)
+            cart_items = models.CartItem.objects.filter(cart_item_filters)
+            if cart_items.exists():
+                cart_items.update(quantity=F("quantity") + difference)
+            elif kwargs.get("should_add"):
+                models.CartItem.objects.create(cart=cart, product=product, quantity=1)
+            cart.refresh_from_db()
+            return UpdateCart(ok=True, cart=cart)
+        except Exception:
+            logger.exception("Error updating cart")
+            return UpdateCart(ok=False, error_message="Unable to update cart")
 
 
 class Mutation(graphene.ObjectType):
     login = Login.Field()
     register = Register.Field()
     update_profile = UpdateProfile.Field()
+    update_cart = UpdateCart.Field()
