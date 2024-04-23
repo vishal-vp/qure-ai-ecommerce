@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.conf import settings
 
 
 class TimeStampedModel(models.Model):
@@ -10,8 +11,34 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields = {"is_staff": False, "is_superuser": False, **extra_fields}
+        if not email:
+            raise ValueError("Users must have an email address")
+        user = User(email=email, **extra_fields)
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields = {**extra_fields, "is_staff": True, "is_superuser": True}
+        user = self.create_user(email=email, password=password, **extra_fields)
+        return user
+
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    username = None
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    objects = UserManager()
+
+
 class UserProfile(TimeStampedModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mobile_number = models.CharField(max_length=20)
     address = models.TextField()
 
@@ -32,10 +59,10 @@ class PurchaseItem(TimeStampedModel):
 
 
 class Cart(TimeStampedModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ManyToManyField(PurchaseItem)
 
 
 class Order(TimeStampedModel):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     products = models.ManyToManyField(PurchaseItem)

@@ -128,3 +128,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 GRAPHENE = {"SCHEMA": "core.schema.schema"}
 
 JWT_SECRET = os.environ.get("JWT_SECRET")
+
+AUTH_USER_MODEL = "core.User"
