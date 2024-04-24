@@ -1,10 +1,10 @@
-.productContainer {
-
+.productCard {
+  margin-bottom: 1rem;
 }
 
 .addRemoveCart {
-    padding: 0.3rem;
+  padding: 0.3rem;
 }
-.addRemoveCart > *{
-    padding: 0 0.2rem
+.addRemoveCart > * {
+  padding: 0 0.2rem;
 }

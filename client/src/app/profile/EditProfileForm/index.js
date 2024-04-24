@@ -4,7 +4,15 @@ import {
 } from "@/app-constants";
 import { UPDATE_PROFILE_MUTATION } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
-import { Button, Form, Input, InputNumber, Spin, message } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Spin,
+  Typography,
+  message,
+} from "antd";
 
 function isValidTenDigitNumber(str) {
   // Check if the string contains only digits and has a length of 10
@@ -40,6 +48,7 @@ export default function EditProfileForm({ user, onProfileSave }) {
 
   return (
     <Spin spinning={updateProfileLoading}>
+      <Typography.Title level={3}>Edit Profile</Typography.Title>
       <Form
         initialValues={{
           mobileNumber: user?.userprofile?.mobileNumber,
@@ -54,6 +63,7 @@ export default function EditProfileForm({ user, onProfileSave }) {
         style={{
           maxWidth: 600,
         }}
+        layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
