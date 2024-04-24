@@ -5,6 +5,8 @@ import { HomeOutlined, LogoutOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import styles from "./index.module.css";
+
 export default function AppHeader() {
   const router = useRouter();
 
@@ -14,13 +16,25 @@ export default function AppHeader() {
   }
 
   return (
-    <>
+    <div className={styles.appHeader}>
       <Link href={PATHS.PRODUCTS}>
-        <HomeOutlined title="Home" />
+        <HomeOutlined title="Home" className="qure-icon" />
       </Link>
-      <Cart />
-      <ProfileWidget />
-      <LogoutOutlined title="Logout" onClick={handleLogout} />
-    </>
+      <div className={styles.appHeaderRightSection}>
+        <div>
+          <Cart />
+        </div>
+        <div>
+          <ProfileWidget />
+        </div>
+        <div>
+          <LogoutOutlined
+            title="Logout"
+            onClick={handleLogout}
+            className="qure-icon"
+          />
+        </div>
+      </div>
+    </div>
   );
 }

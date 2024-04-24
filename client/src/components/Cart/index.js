@@ -2,8 +2,9 @@
 
 import { PATHS } from "@/app-constants";
 import { CART_QUERY } from "@/graphql/queries";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useQuery } from "@apollo/client";
-import { Spin } from "antd";
+import { Badge, Spin } from "antd";
 import Link from "next/link";
 
 export default function Cart() {
@@ -15,9 +16,13 @@ export default function Cart() {
 
   let cartBody = null;
   if (cartDataLoadingError) {
-    cartBody = <div>Error loading cart items!</div>;
+    cartBody = <div>Error!</div>;
   } else {
-    cartBody = <div>Items: {cartData?.cart?.totalNumberOfItems || 0}</div>;
+    cartBody = (
+      <Badge count={cartData?.cart?.totalNumberOfItems || 0}>
+        <ShoppingCartOutlined className="qure-icon" />
+      </Badge>
+    );
   }
 
   return (

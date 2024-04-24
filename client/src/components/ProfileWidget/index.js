@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function ProfileWidget() {
   return (
     <Link title="Profile" href={PATHS.PROFILE}>
-      <UserOutlined />{" "}
+      <UserOutlined className="qure-icon" />{" "}
     </Link>
   );
 }

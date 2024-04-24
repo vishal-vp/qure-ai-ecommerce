@@ -1,0 +1,13 @@
+.appHeader {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.8rem;
+}
+
+.appHeaderRightSection {
+    display: flex;
+    justify-content: space-between;
+}
+.appHeaderRightSection > div{
+    padding: 0 0.8rem;
+}
