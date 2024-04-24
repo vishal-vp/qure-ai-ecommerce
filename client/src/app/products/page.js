@@ -1,12 +1,16 @@
 "use client";
 
 import { SOMETHING_WENT_WRONG_ERR_MSG } from "@/app-constants";
-import Product from "@/components/Product";
 import { UPDATE_CART_MUTATION } from "@/graphql/mutations";
 import { CART_QUERY, PRODUCTS_QUERY } from "@/graphql/queries";
+import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Skeleton, Spin, message } from "antd";
+import { Card, Col, Row, Skeleton, Spin, Typography, message } from "antd";
 import Error from "next/error";
+
+import styles from "./page.module.css";
+
+const { Meta } = Card;
 
 function getNumberOfProductsInCart(productId, cart) {
   return (
@@ -39,7 +43,9 @@ export default function Products() {
         variables: { productId, shouldAdd },
       });
       if (updateCartResponseData?.ok) {
-        message.success("Item added to cart successfully!");
+        message.success(
+          `Item ${shouldAdd ? "added to" : "removed from"} cart successfully!`
+        );
       } else {
         message.error(
           updateCartResponseData?.errorMessage || SOMETHING_WENT_WRONG_ERR_MSG
@@ -58,33 +64,63 @@ export default function Products() {
   }
   return (
     <Spin spinning={updateCartLoading}>
-      {productsData?.products?.map((product) => {
-        const numberOfProductsInCart = getNumberOfProductsInCart(
-          product?.id,
-          cartData?.cart
-        );
-        return (
-          <div key={product?.id}>
-            <Product product={product} />
-            <Button
-              onClick={() =>
-                handleAddToCart({ productId: product?.id, shouldAdd: true })
-              }
-            >
-              Add to cart
-            </Button>
-            <div>{numberOfProductsInCart}</div>
-            <Button
-              onClick={() =>
-                handleAddToCart({ productId: product?.id, shouldAdd: false })
-              }
-              disabled={numberOfProductsInCart === 0}
-            >
-              Remove from cart
-            </Button>
-          </div>
-        );
-      })}
+      <Row gutter={16} className={styles.productContainer}>
+        {productsData?.products?.map((product) => {
+          const numberOfProductsInCart = getNumberOfProductsInCart(
+            product?.id,
+            cartData?.cart
+          );
+          return (
+            <Col span={6} key={product?.id}>
+              <Card
+                hoverable
+                cover={
+                  <img
+                    width={"20%"}
+                    height={"auto"}
+                    alt={product.title}
+                    src={product?.imageUrl}
+                  />
+                }
+              >
+                <Meta
+                  title={product?.name}
+                  description={
+                    <Typography.Paragraph
+                      ellipsis={{ rows: 2, expandable: "collapsible" }}
+                    >
+                      {product?.description}
+                    </Typography.Paragraph>
+                  }
+                />
+                <div className={styles.addRemoveCart}>
+                  <MinusCircleOutlined
+                    onClick={() => {
+                      if (numberOfProductsInCart > 0) {
+                        handleAddToCart({
+                          productId: product?.id,
+                          shouldAdd: false,
+                        });
+                      }
+                    }}
+                    title="Remove from cart"
+                  />
+                  <span>{numberOfProductsInCart}</span>
+                  <PlusCircleOutlined
+                    onClick={() =>
+                      handleAddToCart({
+                        productId: product?.id,
+                        shouldAdd: true,
+                      })
+                    }
+                    title="Add to cart"
+                  />
+                </div>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
     </Spin>
   );
 }

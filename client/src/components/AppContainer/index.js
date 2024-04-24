@@ -11,6 +11,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import AppHeader from "./AppHeader";
 
+import styles from "./index.module.css";
+
 const AppContainer = ({ children }) => {
   const router = useRouter();
   const pathName = usePathname();
@@ -26,12 +28,11 @@ const AppContainer = ({ children }) => {
 
   const shouldDisplayAppHeader =
     PATHS_TO_NOT_SHOW_HEADER.indexOf(pathName) === -1;
-  console.log(pathName);
 
   return (
     <ApolloProvider client={client}>
       {shouldDisplayAppHeader && <AppHeader />}
-      {children}
+      <div className={styles.appContainer}>{children}</div>
     </ApolloProvider>
   );
 };
