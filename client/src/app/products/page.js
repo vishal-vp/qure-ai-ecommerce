@@ -1,6 +1,7 @@
 "use client";
 
 import { SOMETHING_WENT_WRONG_ERR_MSG } from "@/app-constants";
+import Product from "@/components/Product";
 import { UPDATE_CART } from "@/graphql/mutations";
 import { CART_QUERY, PRODUCTS_QUERY } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
@@ -63,7 +64,7 @@ export default function Products() {
         );
         return (
           <div key={product?.id}>
-            <div>{product?.name}</div>
+            <Product product={product} />
             <Button
               onClick={() =>
                 handleAddToCart({ productId: product?.id, shouldAdd: true })

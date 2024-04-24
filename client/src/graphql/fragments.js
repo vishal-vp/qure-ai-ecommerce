@@ -15,8 +15,10 @@ export const CORE_CART_FIELDS = gql`
   fragment CoreCartFields on CartType {
     id
     totalNumberOfItems
+    totalPrice
     cartitemSet {
       id
+      totalPrice
       product {
         ...CoreProductFields
       }

@@ -1,8 +1,10 @@
 "use client";
 
+import { PATHS } from "@/app-constants";
 import { CART_QUERY } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
+import Link from "next/link";
 
 export default function Cart() {
   const {
@@ -18,5 +20,9 @@ export default function Cart() {
     cartBody = <div>Items: {cartData?.cart?.totalNumberOfItems || 0}</div>;
   }
 
-  return <Spin spinning={cartDataLoading}>{cartBody}</Spin>;
+  return (
+    <Spin spinning={cartDataLoading}>
+      <Link href={PATHS.CART}>{cartBody}</Link>
+    </Spin>
+  );
 }
