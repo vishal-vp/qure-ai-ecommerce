@@ -1,33 +1,29 @@
 "use client";
 
-import React from "react";
-import { Button, Form, Input, message } from "antd";
+import { PATHS } from "@/app-constants";
+import { REGISTER_MUTATION } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
-import { LOGIN_MUTATION } from "@/graphql/mutations";
-import {
-  AUTH_TOKEN_KEY,
-  CHECK_FORM_FIELDS_ERR_MSG,
-  PATHS,
-  SOMETHING_WENT_WRONG_ERR_MSG,
-} from "@/app-constants";
+import { Button, Form, Input, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
-const Login = () => {
-  const [login] = useMutation(LOGIN_MUTATION);
+export default function RegisterPage() {
+  const [register, { loading: registerMutationLoading }] =
+    useMutation(REGISTER_MUTATION);
   const router = useRouter();
 
   const onFinish = async (values) => {
     try {
       const {
-        data: { login: loginResponseData },
-      } = await login({ variables: values });
-      if (loginResponseData?.ok) {
-        localStorage.setItem(AUTH_TOKEN_KEY, loginResponseData?.token);
-        router.push(PATHS.PRODUCTS);
+        data: { register: registerResponseData },
+      } = await register({ variables: values });
+      if (registerResponseData?.ok) {
+        message.success(
+          "Successfully registered. Please login to the application using your credentials."
+        );
+        router.push(PATHS.LOGIN);
       } else {
         message.error(
-          loginResponseData?.errorMessage || SOMETHING_WENT_WRONG_ERR_MSG
+          registerResponseData?.errorMessage || SOMETHING_WENT_WRONG_ERR_MSG
         );
       }
     } catch (err) {
@@ -41,6 +37,7 @@ const Login = () => {
 
   return (
     <>
+      <Typography.Title>Register</Typography.Title>
       <Form
         labelCol={{
           span: 8,
@@ -91,12 +88,6 @@ const Login = () => {
           </Button>
         </Form.Item>
       </Form>
-      <span>
-        {"Don't have an account? Click "}
-        <Link href={PATHS.REGISTER}>here</Link>
-        {" to register."}
-      </span>
     </>
   );
-};
-export default Login;
+}

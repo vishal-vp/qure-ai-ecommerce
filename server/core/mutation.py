@@ -54,8 +54,15 @@ class Register(BaseMutation):
 
     @classmethod
     def mutate(cls, root, info, *args, **kwargs):
-        user = User.objects.create(email=kwargs.get("email"))
-        models.UserProfile.objects.create(user=user, **kwargs.get("user_profile"))
+        if User.objects.filter(email__iexact=kwargs.get("email")).exists():
+            return Register(
+                ok=False, error_message="Account with the same email already exists!"
+            )
+        user = User.objects.create(email=kwargs.get("email").lower())
+        user.set_password(kwargs.get("password"))
+        user.save()
+        if kwargs.get("user_profiel"):
+            models.UserProfile.objects.create(user=user, **kwargs.get("user_profile"))
         return Register(ok=True)
 
 

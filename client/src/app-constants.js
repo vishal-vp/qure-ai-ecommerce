@@ -5,6 +5,7 @@ export const PATHS = {
   PRODUCTS: "/products",
   CART: "/cart",
   PROFILE: "/profile",
+  REGISTER: "/register",
 };
 
 // Messages

@@ -54,3 +54,12 @@ export const UPDATE_PROFILE_MUTATION = gql`
     }
   }
 `;
+
+export const REGISTER_MUTATION = gql`
+  mutation Register($email: String!, $password: String) {
+    register(email: $email, password: $password) {
+      ok
+      errorMessage
+    }
+  }
+`;
