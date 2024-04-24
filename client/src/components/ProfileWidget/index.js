@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function ProfileWidget() {
   return (
-    <Link href={PATHS.PROFILE}>
+    <Link title="Profile" href={PATHS.PROFILE}>
       <UserOutlined />{" "}
     </Link>
   );

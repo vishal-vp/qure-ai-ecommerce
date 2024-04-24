@@ -22,7 +22,9 @@ export default function Cart() {
 
   return (
     <Spin spinning={cartDataLoading}>
-      <Link href={PATHS.CART}>{cartBody}</Link>
+      <Link title="Cart" href={PATHS.CART}>
+        {cartBody}
+      </Link>
     </Spin>
   );
 }

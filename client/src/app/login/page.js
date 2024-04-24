@@ -10,10 +10,11 @@ import {
   PATHS,
   SOMETHING_WENT_WRONG_ERR_MSG,
 } from "@/app-constants";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [login] = useMutation(LOGIN_MUTATION);
+  const router = useRouter();
 
   const onFinish = async (values) => {
     try {
@@ -22,7 +23,7 @@ const Login = () => {
       } = await login({ variables: values });
       if (loginResponseData?.ok) {
         localStorage.setItem(AUTH_TOKEN_KEY, loginResponseData?.token);
-        redirect(PATHS.PRODUCTS);
+        router.push(PATHS.PRODUCTS);
       } else {
         message.error(
           loginResponseData?.errorMessage || SOMETHING_WENT_WRONG_ERR_MSG
