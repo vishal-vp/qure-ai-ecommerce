@@ -122,7 +122,10 @@ class PlaceOrder(BaseMutation):
                 cart = models.Cart.objects.get(user=info.context.user)
                 if cart.cartitem_set.all().count() < 1:
                     return PlaceOrder(ok=False, error_message="No items in the cart!")
-                order = models.Order.objects.create(user=info.context.user)
+                order = models.Order.objects.create(
+                    user=info.context.user,
+                    address=info.context.user.userprofile.address,
+                )
                 for cart_item in cart.cartitem_set.select_for_update().all():
                     models.OrderItem.objects.create(
                         product=cart_item.product,

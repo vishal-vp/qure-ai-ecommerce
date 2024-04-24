@@ -71,6 +71,7 @@ class CartItem(TimeStampedModel):
 
 class Order(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    address = models.TextField()
 
     def __str__(self):
         return f"{self.user} - {self.orderitem_set.all().count()}"
