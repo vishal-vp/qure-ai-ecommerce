@@ -1,3 +1,4 @@
+import { AUTH_TOKEN_KEY } from "@/app-constants";
 import {
   ApolloClient,
   ApolloLink,
@@ -13,7 +14,7 @@ export const createApolloClient = () => {
   const authLink = new ApolloLink((operation, forward) => {
     operation.setContext(({ headers }) => ({
       headers: {
-        "x-auth-token": "FJLDS", // however you get your token
+        "x-auth-token": localStorage.getItem(AUTH_TOKEN_KEY), // however you get your token
         ...headers,
       },
     }));
