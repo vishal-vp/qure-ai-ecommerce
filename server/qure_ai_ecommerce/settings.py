@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-(n=@#g3b#5-hrrceq@6f97r*&i0n78*t2s6hjyiy@uro5ra@^i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -40,17 +40,22 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "graphene_django",
     "core",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_HEADERS = ["*"]
 
 ROOT_URLCONF = "qure_ai_ecommerce.urls"
 

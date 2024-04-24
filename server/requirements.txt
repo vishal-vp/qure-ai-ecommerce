@@ -1,3 +1,4 @@
 Django==4.2.11
 graphene-django==3.2.1
 pyjwt==2.8.0
+django-cors-headers==4.3.1

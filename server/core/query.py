@@ -9,7 +9,6 @@ class Query(graphene.ObjectType):
     products = graphene.List(types.ProductType)
     cart = graphene.Field(types.CartType)
 
-    @jwt_token_required
     def resolve_user(self, info, **kwargs):
         return info.context.user
 
