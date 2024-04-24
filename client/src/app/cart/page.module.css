@@ -1,0 +1,12 @@
+.cartItem {
+    display: flex;
+}
+
+.cartItemImage {
+    width: 5rem;
+    height: auto;
+}
+
+.placeOrderContainer > span {
+    padding: 0.8rem;
+}

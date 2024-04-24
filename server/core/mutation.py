@@ -102,6 +102,8 @@ class UpdateCart(BaseMutation):
                 cart_items.update(quantity=F("quantity") + difference)
             elif kwargs.get("should_add"):
                 models.CartItem.objects.create(cart=cart, product=product, quantity=1)
+            if cart_items.first().quantity == 0:
+                cart_items.delete()
             cart.refresh_from_db()
             return UpdateCart(ok=True, cart=cart)
         except Exception:

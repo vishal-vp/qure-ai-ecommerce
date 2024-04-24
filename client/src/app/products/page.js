@@ -74,14 +74,7 @@ export default function Products() {
             <Col span={6} key={product?.id}>
               <Card
                 hoverable
-                cover={
-                  <img
-                    width={"20%"}
-                    height={"auto"}
-                    alt={product.title}
-                    src={product?.imageUrl}
-                  />
-                }
+                cover={<img alt={product.title} src={product?.imageUrl} />}
               >
                 <Meta
                   title={product?.name}

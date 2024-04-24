@@ -6,9 +6,19 @@ import Product from "@/components/Product";
 import { PLACE_ORDER_MUTATION } from "@/graphql/mutations";
 import { CART_QUERY } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Skeleton, message } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  List,
+  Skeleton,
+  Typography,
+  message,
+} from "antd";
 import Error from "next/error";
 import Link from "next/link";
+
+import styles from "./page.module.css";
 
 export default function CartDetails() {
   const {
@@ -44,29 +54,37 @@ export default function CartDetails() {
   }
   if (!cartData?.cart?.cartitemSet?.length) {
     return (
-      <span>
+      <Typography.Text>
         No items in cart. Please click <Link href={PATHS.PRODUCTS}>here </Link>{" "}
         to browse products
-      </span>
+      </Typography.Text>
     );
   }
   return (
     <>
-      {cartData?.cart?.cartitemSet?.map((cartItem) => {
-        return (
-          <div key={cartItem?.id}>
-            <Product product={cartItem?.product} />
-            <p>Quantity: {cartItem?.quantity}</p>
-            <p>
+      <List
+        itemLayout="horizontal"
+        size="large"
+        dataSource={cartData?.cart?.cartitemSet}
+        renderItem={(cartItem) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={<Avatar src={cartItem?.product?.imageUrl} />}
+              title={cartItem?.product?.name}
+              description={cartItem?.product?.description}
+            />
+            <span>
               Price: <Price price={cartItem?.totalPrice} />
-            </p>
-          </div>
-        );
-      })}
-      <span>
-        Total price: <Price price={cartData?.cart?.totalPrice} />
-      </span>
-      <Button onClick={handleOrderPlacement}>Place Order</Button>
+            </span>
+          </List.Item>
+        )}
+      ></List>
+      <div className={styles.placeOrderContainer}>
+        <Typography.Text>
+          Total Price: <Price price={cartData?.cart?.totalPrice} />
+        </Typography.Text>
+        <Button onClick={handleOrderPlacement}>Place Order</Button>
+      </div>
     </>
   );
 }
