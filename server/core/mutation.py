@@ -41,7 +41,9 @@ class Login(BaseMutation):
                 settings.JWT_SECRET,
                 algorithm="HS256",
             )
-        return Login(ok=True if user else False, token=token)
+            return Login(ok=True, token=token)
+        else:
+            return Login(ok=False, error_message="Invalid credentials!")
 
 
 class Register(BaseMutation):

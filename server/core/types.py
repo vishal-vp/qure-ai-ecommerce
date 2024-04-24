@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from core import models
+from django.db.models import Sum
 
 from django.contrib.auth import get_user_model
 
@@ -28,8 +29,17 @@ class CartItemType(DjangoObjectType):
 
 
 class CartType(DjangoObjectType):
+    total_number_of_items = graphene.Int()
+
     class Meta:
         model = models.Cart
+
+    def resolve_total_number_of_items(self, d):
+        return (
+            models.CartItem.objects.filter(cart=self)
+            .aggregate(Sum("quantity", default=0))
+            .get("quantity__sum")
+        )
 
 
 class OrderItemType(DjangoObjectType):

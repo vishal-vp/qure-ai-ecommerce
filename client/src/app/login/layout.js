@@ -1,5 +1,5 @@
 "use-client";
 
-export default function LoginLayout({ children, params }) {
+export default function LoginLayout({ children }) {
   return children;
 }
