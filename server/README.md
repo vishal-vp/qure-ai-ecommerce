@@ -31,6 +31,14 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
+### Update env file
+
+Create `.env` file with below content
+
+```bash
+export JWT_SECRET="LFDJSOJ(@#*UOEU(@*RU))"
+```
+
 ### Start development server
 
 ```bash
