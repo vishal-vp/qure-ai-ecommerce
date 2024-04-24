@@ -2,9 +2,24 @@
 
 ### Setup environment
 
-Install python version 3.9.x
+1. Install pyenv: https://github.com/pyenv/pyenv
+2. Install python. `pyenv install 3.9.0`
 
 ### Install dependencies
+
+1. Create a virtualenvironment.
+
+```bash
+pyenv virtualenv 3.9.0 qure_ai_ecommerce
+```
+
+2. Activate the virtualenvironment
+
+```bash
+pyenv local qure_ai_ecommerce
+```
+
+3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
