@@ -104,6 +104,7 @@ class UpdateCart(BaseMutation):
 class PlaceOrder(BaseMutation):
 
     order = graphene.Field(types.OrderType)
+    cart = graphene.Field(types.CartType)
 
     @classmethod
     @jwt_token_required
@@ -121,7 +122,8 @@ class PlaceOrder(BaseMutation):
                         order=order,
                     )
                     cart_item.delete()
-                return PlaceOrder(ok=True, order=order)
+                cart.refresh_from_db()
+                return PlaceOrder(ok=True, order=order, cart=cart)
         except Exception:
             logger.exception("Error placing order")
             return PlaceOrder(ok=False, error_message="Unable to place order")

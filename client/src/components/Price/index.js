@@ -3,7 +3,7 @@ function roundToTwo(num) {
 }
 
 const Price = ({ price }) => {
-  return <div>{roundToTwo(price)}</div>;
+  return <span>{roundToTwo(price)}</span>;
 };
 
 export default Price;

@@ -24,3 +24,16 @@ export const UPDATE_CART = gql`
     }
   }
 `;
+
+export const PLACE_ORDER = gql`
+  ${CORE_CART_FIELDS}
+  mutation PlaceOrder {
+    placeOrder {
+      ok
+      errorMessage
+      cart {
+        ...CoreCartFields
+      }
+    }
+  }
+`;
