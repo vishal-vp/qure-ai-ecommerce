@@ -2,16 +2,18 @@
 
 import { createApolloClient } from "@/graphql/client";
 import { ApolloProvider } from "@apollo/client";
-import Cart from "../Cart";
-import ProfileWidget from "../ProfileWidget";
-import { HomeOutlined, LogoutOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import { AUTH_TOKEN_KEY, PATHS } from "@/app-constants";
-import { useRouter } from "next/navigation";
+import {
+  AUTH_TOKEN_KEY,
+  PATHS,
+  PATHS_TO_NOT_SHOW_HEADER,
+} from "@/app-constants";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import AppHeader from "./AppHeader";
 
 const AppContainer = ({ children }) => {
   const router = useRouter();
+  const pathName = usePathname();
   const client = createApolloClient();
 
   useEffect(() => {
@@ -22,19 +24,13 @@ const AppContainer = ({ children }) => {
     }
   }, [router]);
 
-  function handleLogout() {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    router.push(PATHS.LOGIN);
-  }
+  const shouldDisplayAppHeader =
+    PATHS_TO_NOT_SHOW_HEADER.indexOf(pathName) === -1;
+  console.log(pathName);
 
   return (
     <ApolloProvider client={client}>
-      <Link href={PATHS.PRODUCTS}>
-        <HomeOutlined title="Home" />
-      </Link>
-      <Cart />
-      <ProfileWidget />
-      <LogoutOutlined title="Logout" onClick={handleLogout} />
+      {shouldDisplayAppHeader && <AppHeader />}
       {children}
     </ApolloProvider>
   );

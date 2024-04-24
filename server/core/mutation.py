@@ -61,6 +61,7 @@ class Register(BaseMutation):
         user = User.objects.create(email=kwargs.get("email").lower())
         user.set_password(kwargs.get("password"))
         user.save()
+        models.Cart.objects.create(user=info.context.user)
         if kwargs.get("user_profiel"):
             models.UserProfile.objects.create(user=user, **kwargs.get("user_profile"))
         return Register(ok=True)
