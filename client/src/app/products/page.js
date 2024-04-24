@@ -2,7 +2,7 @@
 
 import { SOMETHING_WENT_WRONG_ERR_MSG } from "@/app-constants";
 import Product from "@/components/Product";
-import { UPDATE_CART } from "@/graphql/mutations";
+import { UPDATE_CART_MUTATION } from "@/graphql/mutations";
 import { CART_QUERY, PRODUCTS_QUERY } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { Button, Skeleton, Spin, message } from "antd";
@@ -28,7 +28,8 @@ export default function Products() {
     error: cartDataLoadingError,
   } = useQuery(CART_QUERY);
 
-  const [updateCart, { loading: updateCartLoading }] = useMutation(UPDATE_CART);
+  const [updateCart, { loading: updateCartLoading }] =
+    useMutation(UPDATE_CART_MUTATION);
 
   async function handleAddToCart({ productId, shouldAdd }) {
     try {

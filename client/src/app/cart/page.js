@@ -3,7 +3,7 @@
 import { PATHS, SOMETHING_WENT_WRONG_ERR_MSG } from "@/app-constants";
 import Price from "@/components/Price";
 import Product from "@/components/Product";
-import { PLACE_ORDER } from "@/graphql/mutations";
+import { PLACE_ORDER_MUTATION } from "@/graphql/mutations";
 import { CART_QUERY } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { Button, Skeleton, message } from "antd";
@@ -16,7 +16,8 @@ export default function CartDetails() {
     loading: cartDataLoading,
     error: cartDataLoadingError,
   } = useQuery(CART_QUERY);
-  const [placeOrder, { loading: placeOrderLoading }] = useMutation(PLACE_ORDER);
+  const [placeOrder, { loading: placeOrderLoading }] =
+    useMutation(PLACE_ORDER_MUTATION);
 
   async function handleOrderPlacement() {
     try {

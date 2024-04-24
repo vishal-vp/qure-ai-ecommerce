@@ -1,5 +1,9 @@
 import { gql } from "@apollo/client";
-import { CORE_CART_FIELDS, CORE_PRODUCT_FIELDS } from "./fragments";
+import {
+  CORE_CART_FIELDS,
+  CORE_PRODUCT_FIELDS,
+  CORE_USER_PROFILE_FIELDS,
+} from "./fragments";
 
 export const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -11,7 +15,7 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
-export const UPDATE_CART = gql`
+export const UPDATE_CART_MUTATION = gql`
   ${CORE_PRODUCT_FIELDS}
   ${CORE_CART_FIELDS}
   mutation UpdateCart($productId: ID!, $shouldAdd: Boolean!) {
@@ -25,7 +29,7 @@ export const UPDATE_CART = gql`
   }
 `;
 
-export const PLACE_ORDER = gql`
+export const PLACE_ORDER_MUTATION = gql`
   ${CORE_CART_FIELDS}
   mutation PlaceOrder {
     placeOrder {
@@ -33,6 +37,19 @@ export const PLACE_ORDER = gql`
       errorMessage
       cart {
         ...CoreCartFields
+      }
+    }
+  }
+`;
+
+export const UPDATE_PROFILE_MUTATION = gql`
+  ${CORE_USER_PROFILE_FIELDS}
+  mutation UpdateProfile($userProfile: UserProfileInput) {
+    updateProfile(userProfile: $userProfile) {
+      ok
+      errorMessage
+      userProfile {
+        ...CoreUserProfileFields
       }
     }
   }

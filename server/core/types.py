@@ -12,6 +12,12 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
 
+    fields = (
+        "first_name",
+        "last_name",
+        "email",
+    )
+
 
 class UserProfileType(DjangoObjectType):
     class Meta:
